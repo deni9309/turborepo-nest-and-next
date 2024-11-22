@@ -1,0 +1,15 @@
+.turbo
+dist
+test
+.eslint.json
+.next
+.cache
+package.json
+package-lock.json
+public
+node_modules
+next-env.d.ts
+next.config.ts
+yarn.lock
+**/components/ui/*
+app/[locale]/globals.css
