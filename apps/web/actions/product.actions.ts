@@ -7,7 +7,7 @@ export async function createProduct(
   data: CreateProductType
 ) {
   try {
-    const response = await fetch(`http://localhost:3001/products`, {
+    const response = await fetch(`${process.env.API_URL}/products`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export async function createProduct(
 }
 
 export async function getProducts() {
-  const response = await fetch(`http://localhost:3001/products`, {
+  const response = await fetch(`${process.env.API_URL}/products`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
