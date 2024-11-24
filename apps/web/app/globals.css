@@ -81,5 +81,10 @@ body {
   .required-field {
     @apply after:content-['*'] after:text-red-500 after:ml-1;
   }
+
+  .nav_menu {
+    @apply sticky left-0 top-0 flex w-full overflow-hidden justify-center border-none bg-gray-300 p-0 text-slate-600;
+  }
+
 }
 

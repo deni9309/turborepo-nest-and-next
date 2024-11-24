@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -17,8 +18,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { CreateProductSchema } from '@/schemas'
+import { CreateProductType } from '@repo/types'
+import { createProduct } from '@/actions/product.actions'
+import { useRouter } from 'next/navigation'
 
 const CreateProductForm = () => {
+  const { toast } = useToast()
+  const router = useRouter()
+
   const form = useForm<z.infer<typeof CreateProductSchema>>({
     resolver: zodResolver(CreateProductSchema),
     defaultValues: {
@@ -28,10 +35,35 @@ const CreateProductForm = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof CreateProductSchema>) {
-    console.log(values)
-  }
+  async function onSubmit(values: z.infer<typeof CreateProductSchema>) {
+    const validated = CreateProductSchema.safeParse(values)
+    if (!validated.success) {
+      return toast({
+        variant: 'destructive',
+        description: 'Please fill in both the product name and price.',
+      })
+    }
 
+    const data: CreateProductType = {
+      name: validated.data.name,
+      description: validated.data?.description || '',
+      price: Number(validated.data.price),
+    }
+
+    try {
+      const response = await createProduct(data)
+      if ('message' in response) {
+        toast({ variant: 'destructive', title: response.message })
+      }
+
+      form.reset()
+      toast({ title: 'Product created successfully' })
+      router.push('/')
+    } catch (error) {
+      form.reset()
+      toast({ variant: 'destructive', title: 'Error creating product' })
+    }
+  }
   return (
     <div className='px-4 flex flex-col mx-auto items-center w-full lg:max-w-[600px] sm:max-w-[500px] max-sm:max-w-[400px] bg-blue-50/40 rounded-xl shadow-md'>
       <Form {...form}>

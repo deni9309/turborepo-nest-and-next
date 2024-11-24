@@ -1,0 +1,12 @@
+.next
+.cache
+package-lock.json
+public
+node_modules
+next-env.d.ts
+next.config.ts
+yarn.lock
+**/components/ui/*
+app/[locale]/globals.css
+/components/ui/*
+packages/types/*
